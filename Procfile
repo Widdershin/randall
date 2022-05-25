@@ -1,1 +1,1 @@
-bot: bundle exec rails r ./app/discorb_bot.rb
+bot: rails r app/discord_bot.rb
