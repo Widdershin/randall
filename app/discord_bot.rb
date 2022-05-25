@@ -49,14 +49,22 @@ def handle_message(event, source)
   notifier, command, *args = event.text.split(" ")
   command = command.to_s.downcase
 
+  return nil if source == :message && !(notifier == ".randal" || notifier == ".randall")
+
   user_is_admin = event.author.roles.any? { |role| role.permissions.administrator || role.permissions.manage_server{  } }
 
-  return nil if source == :message && !(notifier == ".randal" || notifier == ".randall")
-  return event.respond "Sorry, I only talks to admins right now." unless user_is_admin
-  return event.respond(<<~TEXT) unless RandallCommands.commands.include?(command.to_s)
+  role = :user
+
+  if user_is_admin
+    role = :admin
+  end
+
+  commands = RandallCommands.available_commands(role)
+
+  return event.respond(<<~TEXT) unless commands.include?(command.to_s)
     Howdy 👋
     Available commands:
-    #{RandallCommands.commands.map { |command| " • #{command}" }.join("\n")}
+    #{commands.map { |command| " • #{command}" }.join("\n")}
   TEXT
 
   RandallCommands.new(event).send(command, args)
@@ -65,10 +73,22 @@ end
 class RandallCommands
   attr_reader :event
 
+  @@public_commands = []
   @@commands = []
+
+  def self.public_command(*args, symbol)
+    @@public_commands << [symbol, *args].join(" ")
+    command(*args, symbol)
+  end
 
   def self.command(*args, symbol)
     @@commands << [symbol, *args].join(" ")
+  end
+
+  def self.available_commands(role)
+    return commands if role == :admin
+
+    @@public_commands
   end
 
   def self.commands
@@ -79,7 +99,7 @@ class RandallCommands
     @event = event
   end
 
-  command def rankings(args)
+  public_command def rankings(args)
     results = "Rankings:\n"
 
     last_score = 0
@@ -102,7 +122,7 @@ class RandallCommands
   end
 
 
-  command def tournaments(args)
+  public_command def tournaments(args)
     results = "Recently recorded tournaments:\n"
 
     Tournament.order('created_at DESC').each_with_index do |tournament|
@@ -112,7 +132,7 @@ class RandallCommands
     event.respond(results)
   end
 
-  command def flip(args)
+  public_command def flip(args)
     result = rand(2)
 
     if result == 0
