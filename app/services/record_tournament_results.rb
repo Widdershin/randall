@@ -133,7 +133,7 @@ class RecordTournamentResults
             next
           end
 
-          ranking_points = (player_count - placement) + 1
+          ranking_points = (player_count - placement)
           seed_points = 0
           point_change_cause = "Placed ##{placement}/#{player_count}, earning #{ranking_points} ranking points."
 
