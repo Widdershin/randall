@@ -124,6 +124,7 @@ class RecordTournamentResults
             tag: tag,
             sponsor: sponsor
           )
+
           player.points ||= 0
 
           placement = player_data.dig("standing", "placement")

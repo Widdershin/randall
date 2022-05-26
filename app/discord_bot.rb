@@ -142,7 +142,7 @@ class RandallCommands
     end
   end
 
-  command("(bracket url)", def submit(args)
+  command(def submit(args)
     bracket_url = args.first
 
     begin
@@ -158,7 +158,7 @@ class RandallCommands
     end
   end)
 
-  command("(tournament id)", def forget(args)
+  command(def forget(args)
     slug = args.first
 
     ForgetTournamentResults.new(slug: slug).call
