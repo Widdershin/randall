@@ -20,6 +20,95 @@ puts 'Click on it to invite it to your server.'
 # This method call adds an event handler that will be called on any message that exactly contains the string "Ping!".
 # The code inside it will be executed, and a "Pong!" response will be sent to the channel.
 
+SMASH_ULTIMATE_CHARACTERS = %w{
+  Mario
+  Donkey Kong
+  Link
+  Samus Aran
+  Yoshi
+  Kirby
+  Fox McCloud
+  Pikachu
+  Dark Samus
+  Luigi
+  Ness
+  Captain Falcon
+  Jigglypuff
+  Princess Peach
+  Princess Daisy
+  Bowser
+  Ice Climbers
+  Sheik
+  Princess Zelda
+  Dr. Mario
+  Pichu
+  Falco Lombardi
+  Marth
+  Lucina*
+  Young Link
+  Ganondorf
+  Mewtwo
+  Roy
+  Chrom
+  Mr. Game & Watch
+  Meta Knight
+  Pit
+  Dark Pit
+  Zero Suit Samus
+  Wario
+  Solid Snake
+  Ike
+  Pokémon Trainer
+  Diddy Kong
+  Lucas
+  Sonic
+  King Dedede
+  Pikmin and Olimar
+  Lucario
+  R.O.B.
+  Toon Link
+  Wolf
+  Villager
+  Mega Man
+  Wii Fit Trainer
+  Rosalina and Luma
+  Little Mac
+  Greninja
+  Palutena
+  Pac-Man
+  Robin
+  Shulk
+  Bowser Jr.
+  Duck Hunt
+  Ryu
+  Ken
+  Cloud Strife
+  Corrin
+  Bayonetta
+  Inkling
+  Ridley
+  Simon
+  Richter
+  King K. Rool
+  Isabelle
+  Incineroar
+  Mii Brawler
+  Mii Swordfighter
+  Mii Gunner
+  Piranha Plant
+  Joker
+  Hero
+  Banjo and Kazooie
+  Terry
+  Byleth
+  Min Min
+  Steve
+  Sephiroth
+  Pyra/Mythra
+  Kazuya Mishima
+  Sora
+}
+
 bot.message(start_with: '.randal') do |event|
   process_event(event, :message)
 end
@@ -140,6 +229,10 @@ class RandallCommands
     else
       event.respond("Tails!")
     end
+  end
+
+  public_command def random(args)
+    event.respond(SMASH_ULTIMATE_CHARACTERS.sample)
   end
 
   command(def submit(args)
