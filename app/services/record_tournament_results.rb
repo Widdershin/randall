@@ -136,15 +136,28 @@ class RecordTournamentResults
 
           ranking_points = 1 + (player_count - placement)
           seed_points = 0
+          bonus_points = 0
           point_change_cause = "Placed ##{placement}/#{player_count}, earning #{ranking_points} ranking points."
 
           if placement < seed
             seed_points = seed - placement
-            point_change_cause += "\nSeeded ##{seed}, placed ##{placement}, earning #{seed_points} seed points"
+            point_change_cause += "\nSeeded ##{seed}, placed ##{placement}, earning #{seed_points} seed points."
           end
 
-          summary << "#{player.name} - #{point_change_cause}".gsub("\n", " ")
-          point_change = ranking_points + seed_points
+          if placement == 1
+            bonus_points = 2
+            point_change_cause += "\nWon the bracket, earning #{bonus_points} bonus points."
+          end
+
+          if placement == 2
+            bonus_points = 1
+            point_change_cause += "\nRunner up, earning #{bonus_points} bonus points."
+          end
+
+
+          point_change = ranking_points + seed_points + bonus_points
+
+          summary << "#{player.name} (+#{point_change}) - #{point_change_cause}".gsub("\n", " ")
 
           player.point_changes.create!(
             cause: point_change_cause,

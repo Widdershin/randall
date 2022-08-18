@@ -138,7 +138,7 @@ def handle_message(event, source)
   notifier, command, *args = event.text.split(" ")
   command = command.to_s.downcase
 
-  return nil if source == :message && !(notifier == ".randal" || notifier == ".randall")
+  return nil if source == :message && !(notifier == ".randal" || notifier == ".randall" || (Rails.env.development? && notifier == ".randal-dev"))
 
   user_is_admin = event.author.roles.any? { |role| role.permissions.administrator || role.permissions.manage_server{  } }
 
@@ -215,7 +215,7 @@ class RandallCommands
     results = "Recently recorded tournaments:\n"
 
     Tournament.order('created_at DESC').each_with_index do |tournament|
-      results += "• #{tournament.name} (#{tournament.url} - id: #{tournament.slug})\n"
+      results += "• #{tournament.name} (https://www.start.gg#{tournament.url} - id: #{tournament.slug})\n"
     end
 
     event.respond(results)
